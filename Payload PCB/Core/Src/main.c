@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "Drivers/max7300.h"; // I/O Expander (I2C)
+#include "Drivers/tlv2553.h"; // ADC (SPI)
 
 /* USER CODE END Includes */
 
