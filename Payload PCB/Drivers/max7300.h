@@ -8,6 +8,6 @@
 #ifndef MAX7300_H_
 #define MAX7300_H_
 
-
+void MAX7300_Init(void);
 
 #endif /* MAX7300_H_ */
