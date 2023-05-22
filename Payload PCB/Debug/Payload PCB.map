@@ -3690,12 +3690,15 @@ Discarded input sections
  .bss.payloadBuffer
                 0x0000000000000000       0x80 ./Drivers/max7300.o
  .text.MAX7300_Init
-                0x0000000000000000       0x98 ./Drivers/max7300.o
- .debug_info    0x0000000000000000      0x705 ./Drivers/max7300.o
- .debug_abbrev  0x0000000000000000      0x19a ./Drivers/max7300.o
+                0x0000000000000000      0x100 ./Drivers/max7300.o
+ .text.setPin   0x0000000000000000       0x84 ./Drivers/max7300.o
+ .text.clearPins
+                0x0000000000000000       0x54 ./Drivers/max7300.o
+ .debug_info    0x0000000000000000      0x783 ./Drivers/max7300.o
+ .debug_abbrev  0x0000000000000000      0x1c7 ./Drivers/max7300.o
  .debug_aranges
-                0x0000000000000000       0x20 ./Drivers/max7300.o
- .debug_ranges  0x0000000000000000       0x10 ./Drivers/max7300.o
+                0x0000000000000000       0x30 ./Drivers/max7300.o
+ .debug_ranges  0x0000000000000000       0x20 ./Drivers/max7300.o
  .debug_macro   0x0000000000000000      0x237 ./Drivers/max7300.o
  .debug_macro   0x0000000000000000      0xa78 ./Drivers/max7300.o
  .debug_macro   0x0000000000000000       0x22 ./Drivers/max7300.o
@@ -3737,10 +3740,10 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x364 ./Drivers/max7300.o
  .debug_macro   0x0000000000000000      0x2fe ./Drivers/max7300.o
  .debug_macro   0x0000000000000000      0x2eb ./Drivers/max7300.o
- .debug_line    0x0000000000000000      0x7d0 ./Drivers/max7300.o
- .debug_str     0x0000000000000000    0xd81a5 ./Drivers/max7300.o
+ .debug_line    0x0000000000000000      0x876 ./Drivers/max7300.o
+ .debug_str     0x0000000000000000    0xd81c9 ./Drivers/max7300.o
  .comment       0x0000000000000000       0x51 ./Drivers/max7300.o
- .debug_frame   0x0000000000000000       0x38 ./Drivers/max7300.o
+ .debug_frame   0x0000000000000000       0x80 ./Drivers/max7300.o
  .ARM.attributes
                 0x0000000000000000       0x34 ./Drivers/max7300.o
  .group         0x0000000000000000        0xc ./Drivers/thermostats.o

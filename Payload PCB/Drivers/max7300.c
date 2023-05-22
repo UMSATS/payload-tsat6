@@ -60,4 +60,33 @@ void MAX7300_Init(void) {
 	payloadBuffer[4] = 0b01010101;
 	HAL_I2C_Master_Transmit(&hi2c1, MAX7300_ADDRESS, payloadBuffer, 5, HAL_MAX_DELAY);
 
+	// MAX7300 is now configured for all pins 12-31 to be outputs
+
+	// we will now set all of the LOW just in case
+	for (int i = 12; i < 32; i++) {
+		payloadBuffer[0] = PORTREGISTERS[i]; // set the address to the relevant port's setting address
+		payloadBuffer[1] = 0; // set the data to be written to 0
+		HAL_I2C_Master_Transmit(&hi2c1, MAX7300_ADDRESS, payloadBuffer, 2, HAL_MAX_DELAY);
+	}
+
+	// now all outputs are off
+
+}
+
+// set pin "pinNumber" to the value in "pinValue"
+void setPin(int pinNumber, int pinValue) {
+	if ((pinNumber >= 12) & (pinNumber <= 31) & ((pinValue == 1) | (pinValue == 0))) {
+		payloadBuffer[0] = PORTREGISTERS[pinNumber];
+		payloadBuffer[1] = pinValue;
+		HAL_I2C_Master_Transmit(&hi2c1, MAX7300_ADDRESS, payloadBuffer, 2, HAL_MAX_DELAY);
+	}
+}
+
+// sets all pins to 0 (LOw)
+void clearPins(void) {
+	for (int i = 12; i < 32; i++) {
+		payloadBuffer[0] = PORTREGISTERS[i]; // set the address to the relevant port's setting address
+		payloadBuffer[1] = 0; // set the data to be written to 0
+		HAL_I2C_Master_Transmit(&hi2c1, MAX7300_ADDRESS, payloadBuffer, 2, HAL_MAX_DELAY);
+	}
 }

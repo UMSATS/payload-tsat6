@@ -1,1 +1,3 @@
 ../Drivers/max7300.c:26:6:MAX7300_Init	32	static
+../Drivers/max7300.c:77:6:setPin	24	static
+../Drivers/max7300.c:86:6:clearPins	24	static
