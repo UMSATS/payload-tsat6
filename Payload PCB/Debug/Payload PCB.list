@@ -1109,9 +1109,9 @@ void MX_SPI3_Init(void)
  8000782:	4b18      	ldr	r3, [pc, #96]	; (80007e4 <MX_SPI3_Init+0x74>)
  8000784:	2200      	movs	r2, #0
  8000786:	609a      	str	r2, [r3, #8]
-  hspi3.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi3.Init.DataSize = SPI_DATASIZE_12BIT;
  8000788:	4b16      	ldr	r3, [pc, #88]	; (80007e4 <MX_SPI3_Init+0x74>)
- 800078a:	f44f 7240 	mov.w	r2, #768	; 0x300
+ 800078a:	f44f 6230 	mov.w	r2, #2816	; 0xb00
  800078e:	60da      	str	r2, [r3, #12]
   hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
  8000790:	4b14      	ldr	r3, [pc, #80]	; (80007e4 <MX_SPI3_Init+0x74>)

@@ -26,10 +26,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "max7300.h" // I/O Expander (I2C)
-#include "tlv2553.h" // ADC (SPI)
-#include "thermostats.h" // Well temperature readings
-#include "heaters.h" // Well heater system
+#include "max7300.h" 		// I/O Expander (I2C)
+#include "tlv2553.h" 		// ADC (SPI)
+#include "thermostats.h" 	// Well temperature readings
+#include "heaters.h" 		// Well heater system
 
 /* USER CODE END Includes */
 
