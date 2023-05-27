@@ -9,7 +9,7 @@
 #define MAX7300_H_
 
 void MAX7300_Init(void);
-void setPin(int pinNumber, int pinValue);
-void clearPins(void);
+void MAX7300_setPin(int pinNumber, int pinValue);
+void MAX7300_clearPins(void);
 
 #endif /* MAX7300_H_ */

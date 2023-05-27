@@ -23,6 +23,6 @@ void measureAllChannels(void) {
 }
 
 // The ADC is an successive approximation ADC so the input impedance is non-negligible (~550R). We have to account for loading effect
-uint16_t loadingEffectConverter(uint16_t rawData) {
+float convertToTemp(uint16_t rawData) {
 
 }

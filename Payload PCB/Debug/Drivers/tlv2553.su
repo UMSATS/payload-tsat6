@@ -1,2 +1,2 @@
 ../Drivers/tlv2553.c:21:6:measureAllChannels	4	static
-../Drivers/tlv2553.c:26:10:loadingEffectConverter	16	static
+../Drivers/tlv2553.c:26:7:convertToTemp	16	static

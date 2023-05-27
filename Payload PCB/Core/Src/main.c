@@ -31,11 +31,14 @@
 #include "thermostats.h" 	// Well temperature readings
 #include "heaters.h" 		// Well heater system
 
+#include <string.h> 		// for debugging only most likely
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+#define HIGH	1 // for GPIO
+#define LOW		0
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -72,6 +75,8 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+	char debugString[128];
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -98,6 +103,8 @@ int main(void)
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
 
+  MAX7300_Init();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -105,6 +112,21 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  MAX7300_setPin(28, HIGH);
+	  MAX7300_setPin(30, HIGH);
+	  MAX7300_setPin(12, HIGH);
+	  MAX7300_setPin(16, HIGH);
+	  MAX7300_setPin(17, HIGH);
+	  MAX7300_setPin(21, HIGH);
+	  HAL_Delay(30000);
+	  MAX7300_setPin(28, LOW);
+	  MAX7300_setPin(30, LOW);
+	  HAL_Delay(20000);
+	  MAX7300_setPin(12, LOW);
+	  MAX7300_setPin(16, LOW);
+	  MAX7300_setPin(17, LOW);
+	  MAX7300_setPin(21, LOW);
+	  HAL_Delay(10000);
 
     /* USER CODE BEGIN 3 */
   }
