@@ -171,6 +171,8 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI3_Init();
   MX_TIM2_Init();
+
+  HAL_TIM_Base_Start_IT(&htim2); // Enable TIM2
   /* USER CODE BEGIN 2 */
 
   MAX7300_Init();

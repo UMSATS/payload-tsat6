@@ -60,8 +60,8 @@ all: main-build
 main-build: Nucleo-64\ Test.elf secondary-outputs
 
 # Tool invocations
-Nucleo-64\ Test.elf Nucleo-64\ Test.map: $(OBJS) $(USER_OBJS) C:\Users\Jascha\STM32CubeIDE\workspace_1.10.1\Nucleo-64\ Test\STM32L452RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Nucleo-64 Test.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Jascha\STM32CubeIDE\workspace_1.10.1\Nucleo-64 Test\STM32L452RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Nucleo-64 Test.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Nucleo-64\ Test.elf Nucleo-64\ Test.map: $(OBJS) $(USER_OBJS) C:\Users\Jascha\Documents\GitHub\payload-tsat6\Nucleo-64\ Test\STM32L452RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Nucleo-64 Test.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Jascha\Documents\GitHub\payload-tsat6\Nucleo-64 Test\STM32L452RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Nucleo-64 Test.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
