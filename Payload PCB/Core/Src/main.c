@@ -31,6 +31,7 @@
 #include "lowlevel/max6822.h"		// Watchdog/supervisor
 #include "thermostats.h" 			// Well temperature readings
 #include "heaters.h" 				// Well heater system
+#include "leds.h"					// LEDs
 
 #include "can_message_queue.h"
 
@@ -190,7 +191,8 @@ int main(void)
 
 		    	  therm_id = can_message.data[0];
 
-		    	  // TODO: ENABLE THERMOREGULATION SYSTEM FROM therm_id
+		    	  THERM_enableThermostat(therm_id);
+
 		    	  response.priority = 0b0000011;
 		    	  response.data[0] = 0xA3;
 		    	  response.data[1] = therm_id;
@@ -204,7 +206,8 @@ int main(void)
 
 		    	  therm_id = can_message.data[0];
 
-		    	  // TODO: DISABLE THERMOREGULATION SYSTEM FROM therm_id
+		    	  THERM_disableThermostat(therm_id);
+
 		    	  response.priority = 0b0000001;
 		    	  response.data[0] = 0xA4;
 		    	  response.data[1] = therm_id;
@@ -218,10 +221,11 @@ int main(void)
 
 		    	  heater_id = can_message.data[0];
 
-		    	  // TODO: ENABLE HEATER FROM heater_id
+		    	  HEAT_enableHeater(heater_id);
+
 		    	  response.priority = 0b0000011;
 		    	  response.data[0] = 0xA5;
-		    	  response.data[1] = therm_id;
+		    	  response.data[1] = heater_id;
 		    	  CAN_Transmit_Message(response);
 
 		          break;
@@ -232,7 +236,8 @@ int main(void)
 
 		    	  heater_id = can_message.data[0];
 
-		    	  // TODO: DISABLE HEATER FROM heater_id
+		    	  HEAT_disableHeater(heater_id);
+
 		    	  response.priority = 0b0000001;
 		    	  response.data[0] = 0xA6;
 		    	  response.data[1] = heater_id;

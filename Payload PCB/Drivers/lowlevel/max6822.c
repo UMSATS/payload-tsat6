@@ -2,8 +2,11 @@
  * max6822.c
  *
  *  Created on: May 29, 2023
- *      Author: Jascha
+ *      Author: Jacob Petersen
  */
+
+#include <stdint.h>
+#include "gpio.h"
 
 #define WDI_PIN 	GPIOC, GPIO_PIN_9 	// watchdog input pin
 #define MR_PIN		GPIOC, GPIO_PIN_8	// master reset pin

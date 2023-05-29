@@ -1,0 +1,2 @@
+../Drivers/heaters.c:12:6:HEAT_enableHeater	0	static
+../Drivers/heaters.c:16:6:HEAT_disableHeater	0	static
