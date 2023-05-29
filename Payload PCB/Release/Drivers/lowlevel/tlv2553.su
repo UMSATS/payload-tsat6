@@ -1,1 +1,3 @@
-../Drivers/lowlevel/tlv2553.c:21:10:TLV2553_measureChannel	0	static
+../Drivers/lowlevel/tlv2553.c:52:6:TLV2553_enableCS	0	static
+../Drivers/lowlevel/tlv2553.c:27:10:TLV2553_measureChannel	24	static
+../Drivers/lowlevel/tlv2553.c:56:6:TLV2553_disableCS	0	static

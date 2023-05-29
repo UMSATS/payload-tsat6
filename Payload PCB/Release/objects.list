@@ -37,6 +37,7 @@
 "./Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.o"
 "./Drivers/heaters.o"
 "./Drivers/leds.o"
+"./Drivers/lightlevels.o"
 "./Drivers/temperatures.o"
 "./Drivers/thermostats.o"
 "./Drivers/lowlevel/max6822.o"

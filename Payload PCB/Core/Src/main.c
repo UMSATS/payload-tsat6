@@ -34,6 +34,7 @@
 #include "heaters.h" 				// Well heater system
 #include "leds.h"					// LEDs
 #include "temperatures.h"			// Well temperature monitoring system
+#include "lightlevels.h"			// Well light level monitoring system
 
 #include "can_message_queue.h"
 
@@ -90,12 +91,31 @@ void TEMP_transmitTemperatureData(uint8_t wellID) {
 
 }
 
+// function to get light level data, package it and send it through CAN
+void LIGHT_transmitLightLevelData(uint8_t wellID) {
+	uint16_t lightLevelReading = LIGHT_getWellLightLevelReading(wellID);
+
+	CANMessage_t message;
+
+	message.SenderID = 0x3;
+	message.DestinationID = 0x1;
+	message.command = 0x33;
+	message.priority = 0b0011111;
+
+	message.data[0] = wellID;
+	message.data[1] = wellId;
+	message.data[2] = (lightLevelReading & 0xFF00) >> 8;
+	message.data[3] = lightLevelReading & 0xFF;
+
+	CAN_Transmit_Message(message);
+}
+
 // Interrupt handler for new CAN message
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan) {
 	CAN_Message_Received(); // no error handling right now
 }
 
-// this SHOULD happen once per second. System clock = 4MHz, timer interval is 4000000.
+// this SHOULD happen once per second. System clock = 80MHz, timer interval is 80000000.
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 	secondsCounter++;
 	if (secondsCounter >= 60) {
@@ -104,6 +124,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 		for (int i = 1; i < 11; i++) {
 			TEMP_transmitTemperatureData(i);
 		}
+
+		for (int i = 1; i < 11; i++) {
+			LIGHT_transmitLightLevelData(i);
+		}
+
 
 	}
 
@@ -320,7 +345,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
   RCC_OscInitStruct.PLL.PLLM = 1;
-  RCC_OscInitStruct.PLL.PLLN = 16;
+  RCC_OscInitStruct.PLL.PLLN = 40;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
@@ -334,11 +359,11 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV8;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }

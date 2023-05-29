@@ -1,6 +1,5 @@
-Drivers/lowlevel/tlv2553.o: ../Drivers/lowlevel/tlv2553.c \
- ../Core/Inc/gpio.h ../Core/Inc/main.h \
- ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
+Drivers/lightlevels.o: ../Drivers/lightlevels.c ../Core/Inc/spi.h \
+ ../Core/Inc/main.h ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
  ../Core/Inc/stm32l4xx_hal_conf.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h \
@@ -34,8 +33,8 @@ Drivers/lowlevel/tlv2553.o: ../Drivers/lowlevel/tlv2553.c \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h \
- ../Core/Inc/spi.h
-../Core/Inc/gpio.h:
+ ../Core/Inc/gpio.h
+../Core/Inc/spi.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
@@ -71,4 +70,4 @@ Drivers/lowlevel/tlv2553.o: ../Drivers/lowlevel/tlv2553.c \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h:
-../Core/Inc/spi.h:
+../Core/Inc/gpio.h:
