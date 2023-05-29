@@ -26,12 +26,14 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "max7300.h" 		// I/O Expander (I2C)
-#include "tlv2553.h" 		// ADC (SPI)
-#include "thermostats.h" 	// Well temperature readings
-#include "heaters.h" 		// Well heater system
+#include "lowlevel/max7300.h" 		// I/O Expander (I2C)
+#include "lowlevel/tlv2553.h" 		// ADC (SPI)
+#include "lowlevel/max6822.h"		// Watchdog/supervisor
+#include "thermostats.h" 			// Well temperature readings
+#include "heaters.h" 				// Well heater system
 
-#include <string.h> 		// for debugging only most likely
+#include "can_driver.h" 			// CDH provided CAN drivers (can.c renamed to can_driver.c to prevent conflicts)
+#include "can_message_queue.h"
 
 /* USER CODE END Includes */
 
@@ -65,6 +67,12 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+// Interrupt handler for new CAN message
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef * hcan) {
+	CAN_Message_Received(); // no error handling right now
+}
+
+
 /* USER CODE END 0 */
 
 /**
@@ -75,8 +83,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-	char debugString[128];
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -85,6 +91,8 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
+  CANQueue_t can_queue; // CAN Queue object
 
   /* USER CODE END Init */
 
@@ -104,6 +112,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   MAX7300_Init();
+  CAN_Queue_Init(&can_queue);
+
+  HAL_StatusTypeDef can_operation_status;
+  can_operation_status = CAN_Init(); 		// defined in the custom can_driver file
+  // if (can_operation_status != HAL_OK) goto error;
 
   /* USER CODE END 2 */
 
@@ -112,23 +125,124 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  MAX7300_setPin(28, HIGH);
-	  MAX7300_setPin(30, HIGH);
-	  MAX7300_setPin(12, HIGH);
-	  MAX7300_setPin(16, HIGH);
-	  MAX7300_setPin(17, HIGH);
-	  MAX7300_setPin(21, HIGH);
-	  HAL_Delay(30000);
-	  MAX7300_setPin(28, LOW);
-	  MAX7300_setPin(30, LOW);
-	  HAL_Delay(20000);
-	  MAX7300_setPin(12, LOW);
-	  MAX7300_setPin(16, LOW);
-	  MAX7300_setPin(17, LOW);
-	  MAX7300_setPin(21, LOW);
-	  HAL_Delay(10000);
 
     /* USER CODE BEGIN 3 */
+
+	  if (!CAN_Queue_IsEmpty(&can_queue)) {
+		  CANMessage can_message;
+		  CAN_Queue_Dequeue(&can_queue, &can_message);
+
+		  CANMessage_t response;
+
+		  // these will be the same for every command
+		  response.SenderID = 0x3; // PLD
+		  response.DestinationID = 0x1; // CDH
+		  response.command = 0x01; // ACK command code
+
+		  switch (can_message.command) {
+		      case 0xA0: // RESET command
+
+		    	  CAN_Send_Default_ACK(can_message);
+
+		          response.priority = 0x0;
+		          response.data[0] = 0xA0;
+		          CAN_Transmit_Message(response);
+
+		          // TODO: MANUALLY RESET BY PULLING MR LOW
+
+		          break;
+
+		      case 0xA1: // LED ON command
+
+		    	  CAN_Send_Default_ACK(can_message);
+
+		    	  uint8_t led_id = can_message.data[0];
+
+		          // TODO: ENABLE LED FROM led_id
+		    	  response.priority = 0b0001111;
+		    	  response.data[0] = 0xA1;
+		    	  response.data[1] = led_id;
+		    	  CAN_Transmit_Message(response);
+
+				  break;
+
+		      case 0xA2: // LED OFF command
+
+		    	  CAN_Send_Default_ACK(can_message);
+
+		    	  uint8_t led_id = can_message.data[0];
+
+		    	  // TODO: DISABLE LED FROM led_id
+		    	  response.priority = 0b0000111;
+		    	  response.data[0] = 0xA2;
+		    	  response.data[1] = led_id;
+		    	  CAN_Transmit_Message(response);
+
+		          break;
+
+		      case 0xA3: // THERMOREGULATION ON command
+
+		    	  CAN_Send_Default_ACK(can_message);
+
+		    	  uint8_t therm_id = can_message.data[0];
+
+		    	  // TODO: ENABLE THERMOREGULATION SYSTEM FROM therm_id
+		    	  response.priority = 0b0000011;
+		    	  response.data[0] = 0xA3;
+		    	  response.data[1] = therm_id;
+		    	  CAN_Transmit_Message(response);
+
+		          break;
+
+		      case 0xA4: // THERMOREGULATION OFF COMMAND
+
+		    	  CAN_Send_Default_ACK(can_message);
+
+		    	  uint8_t therm_id = can_message.data[0];
+
+		    	  // TODO: DISABLE THERMOREGULATION SYSTEM FROM therm_id
+		    	  response.priority = 0b0000001;
+		    	  response.data[0] = 0xA4;
+		    	  response.data[1] = therm_id;
+		    	  CAN_Transmit_Message(response);
+
+		          break;
+
+		      case 0xA5: // HEAT ON command
+
+		    	  CAN_Send_Default_ACK(can_message);
+
+		    	  uint8_t heater_id = can_message.data[0];
+
+		    	  // TODO: ENABLE HEATER FROM heater_id
+		    	  response.priority = 0b0000011;
+		    	  response.data[0] = 0xA5;
+		    	  response.data[1] = therm_id;
+		    	  CAN_Transmit_Message(response);
+
+		          break;
+
+		      case 0xA6: // HEATER OFF command
+
+		    	  CAN_Send_Default_ACK(can_message);
+
+		    	  uint8_t heater_id = can_message.data[0];
+
+		    	  // TODO: DISABLE HEATER FROM heater_id
+		    	  response.priority = 0b0000001;
+		    	  response.data[0] = 0xA6;
+		    	  response.data[1] = heater_id;
+		    	  CAN_Transmit_Message(response);
+
+		          break;
+
+		      default:
+		          break;
+		  }
+
+
+	  }
+
   }
   /* USER CODE END 3 */
 }

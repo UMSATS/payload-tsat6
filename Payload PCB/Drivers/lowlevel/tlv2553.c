@@ -17,12 +17,7 @@ const int wellMapping[11] = {-1, 5, 4, 3, 2, 1, 10, 9, 8, 7, 6};
 
 uint16_t readingData[10];	// array of 16 bit ints for raw temperature data
 
-// Measures all 10 wells
-void measureAllChannels(void) {
-
-}
-
-// The ADC is an successive approximation ADC so the input impedance is non-negligible (~550R). We have to account for loading effect
-float convertToTemp(uint16_t rawData) {
-
+// returns a 12-bit resolution ADC reading. Left 4 bits will be padded 0s
+uint16_t TLV2553_measureChannel(int channelNumber) {
+	uint16_t result;
 }

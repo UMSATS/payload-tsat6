@@ -5,29 +5,29 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Drivers/heaters.c \
-../Drivers/leds.c \
-../Drivers/thermostats.c 
+../Drivers/lowlevel/max6822.c \
+../Drivers/lowlevel/max7300.c \
+../Drivers/lowlevel/tlv2553.c 
 
 OBJS += \
-./Drivers/heaters.o \
-./Drivers/leds.o \
-./Drivers/thermostats.o 
+./Drivers/lowlevel/max6822.o \
+./Drivers/lowlevel/max7300.o \
+./Drivers/lowlevel/tlv2553.o 
 
 C_DEPS += \
-./Drivers/heaters.d \
-./Drivers/leds.d \
-./Drivers/thermostats.d 
+./Drivers/lowlevel/max6822.d \
+./Drivers/lowlevel/max7300.d \
+./Drivers/lowlevel/tlv2553.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Drivers/%.o Drivers/%.su: ../Drivers/%.c Drivers/subdir.mk
+Drivers/lowlevel/%.o Drivers/lowlevel/%.su: ../Drivers/lowlevel/%.c Drivers/lowlevel/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L452xx -c -I../Core/Inc -I../Drivers -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
-clean: clean-Drivers
+clean: clean-Drivers-2f-lowlevel
 
-clean-Drivers:
-	-$(RM) ./Drivers/heaters.d ./Drivers/heaters.o ./Drivers/heaters.su ./Drivers/leds.d ./Drivers/leds.o ./Drivers/leds.su ./Drivers/thermostats.d ./Drivers/thermostats.o ./Drivers/thermostats.su
+clean-Drivers-2f-lowlevel:
+	-$(RM) ./Drivers/lowlevel/max6822.d ./Drivers/lowlevel/max6822.o ./Drivers/lowlevel/max6822.su ./Drivers/lowlevel/max7300.d ./Drivers/lowlevel/max7300.o ./Drivers/lowlevel/max7300.su ./Drivers/lowlevel/tlv2553.d ./Drivers/lowlevel/tlv2553.o ./Drivers/lowlevel/tlv2553.su
 
-.PHONY: clean-Drivers
+.PHONY: clean-Drivers-2f-lowlevel
 

@@ -1,0 +1,4 @@
+../Core/Src/can_driver.c:30:19:CAN_Init	56	static
+../Core/Src/can_driver.c:63:19:CAN_Transmit_Message	64	static
+../Core/Src/can_driver.c:84:19:CAN_Message_Received	64	static
+../Core/Src/can_driver.c:120:19:CAN_Send_Default_ACK	40	static
