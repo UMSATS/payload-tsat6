@@ -126,6 +126,8 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+	  MAX6822_Toggle_WDI();
+
 	  if (!CAN_Queue_IsEmpty(&can_queue)) {
 		  CANMessage_t can_message;
 		  CAN_Queue_Dequeue(&can_queue, &can_message);
@@ -148,7 +150,7 @@ int main(void)
 		          response.data[0] = 0xA0;
 		          CAN_Transmit_Message(response);
 
-		          // TODO: MANUALLY RESET BY PULLING MR LOW
+		          MAX6822_Manual_Reset();
 
 		          break;
 
