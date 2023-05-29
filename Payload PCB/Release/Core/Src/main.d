@@ -31,10 +31,13 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h \
+ ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h \
+ ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h \
  ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/can.h ../Core/Inc/i2c.h \
- ../Core/Inc/spi.h ../Core/Inc/gpio.h ../Drivers/lowlevel/max7300.h \
- ../Drivers/lowlevel/tlv2553.h ../Drivers/lowlevel/max6822.h \
- ../Drivers/thermostats.h ../Drivers/heaters.h ../Drivers/leds.h \
+ ../Core/Inc/spi.h ../Core/Inc/tim.h ../Core/Inc/gpio.h \
+ ../Drivers/lowlevel/max7300.h ../Drivers/lowlevel/tlv2553.h \
+ ../Drivers/lowlevel/max6822.h ../Drivers/thermostats.h \
+ ../Drivers/heaters.h ../Drivers/leds.h ../Drivers/temperatures.h \
  ../Core/Inc/can_message_queue.h ../Core/Inc/can_driver.h
 ../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
@@ -69,11 +72,14 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h:
+../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h:
+../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h:
 ../Core/Inc/adc.h:
 ../Core/Inc/main.h:
 ../Core/Inc/can.h:
 ../Core/Inc/i2c.h:
 ../Core/Inc/spi.h:
+../Core/Inc/tim.h:
 ../Core/Inc/gpio.h:
 ../Drivers/lowlevel/max7300.h:
 ../Drivers/lowlevel/tlv2553.h:
@@ -81,5 +87,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/thermostats.h:
 ../Drivers/heaters.h:
 ../Drivers/leds.h:
+../Drivers/temperatures.h:
 ../Core/Inc/can_message_queue.h:
 ../Core/Inc/can_driver.h:

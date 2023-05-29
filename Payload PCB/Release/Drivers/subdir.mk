@@ -7,16 +7,19 @@
 C_SRCS += \
 ../Drivers/heaters.c \
 ../Drivers/leds.c \
+../Drivers/temperatures.c \
 ../Drivers/thermostats.c 
 
 OBJS += \
 ./Drivers/heaters.o \
 ./Drivers/leds.o \
+./Drivers/temperatures.o \
 ./Drivers/thermostats.o 
 
 C_DEPS += \
 ./Drivers/heaters.d \
 ./Drivers/leds.d \
+./Drivers/temperatures.d \
 ./Drivers/thermostats.d 
 
 
@@ -27,7 +30,7 @@ Drivers/%.o Drivers/%.su: ../Drivers/%.c Drivers/subdir.mk
 clean: clean-Drivers
 
 clean-Drivers:
-	-$(RM) ./Drivers/heaters.d ./Drivers/heaters.o ./Drivers/heaters.su ./Drivers/leds.d ./Drivers/leds.o ./Drivers/leds.su ./Drivers/thermostats.d ./Drivers/thermostats.o ./Drivers/thermostats.su
+	-$(RM) ./Drivers/heaters.d ./Drivers/heaters.o ./Drivers/heaters.su ./Drivers/leds.d ./Drivers/leds.o ./Drivers/leds.su ./Drivers/temperatures.d ./Drivers/temperatures.o ./Drivers/temperatures.su ./Drivers/thermostats.d ./Drivers/thermostats.o ./Drivers/thermostats.su
 
 .PHONY: clean-Drivers
 
