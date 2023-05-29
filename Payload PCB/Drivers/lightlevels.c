@@ -11,6 +11,6 @@
 
 uint16_t LIGHT_getWellLightReading(uint8_t wellID) {
 	uint16_t result;
-	result = TLV2553_measureChannel(wellId - 1);
+	result = TLV2553_measureChannel(wellID - 1);
 	return result;
 }

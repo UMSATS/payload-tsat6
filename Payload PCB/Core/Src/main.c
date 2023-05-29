@@ -93,7 +93,7 @@ void TEMP_transmitTemperatureData(uint8_t wellID) {
 
 // function to get light level data, package it and send it through CAN
 void LIGHT_transmitLightLevelData(uint8_t wellID) {
-	uint16_t lightLevelReading = LIGHT_getWellLightLevelReading(wellID);
+	uint16_t lightLevelReading = LIGHT_getWellLightReading(wellID);
 
 	CANMessage_t message;
 
@@ -103,7 +103,7 @@ void LIGHT_transmitLightLevelData(uint8_t wellID) {
 	message.priority = 0b0011111;
 
 	message.data[0] = wellID;
-	message.data[1] = wellId;
+	message.data[1] = wellID;
 	message.data[2] = (lightLevelReading & 0xFF00) >> 8;
 	message.data[3] = lightLevelReading & 0xFF;
 

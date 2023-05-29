@@ -38,7 +38,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/lowlevel/max7300.h ../Drivers/lowlevel/tlv2553.h \
  ../Drivers/lowlevel/max6822.h ../Drivers/thermostats.h \
  ../Drivers/heaters.h ../Drivers/leds.h ../Drivers/temperatures.h \
- ../Core/Inc/can_message_queue.h ../Core/Inc/can_driver.h
+ ../Drivers/lightlevels.h ../Core/Inc/can_message_queue.h \
+ ../Core/Inc/can_driver.h
 ../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
@@ -88,5 +89,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/heaters.h:
 ../Drivers/leds.h:
 ../Drivers/temperatures.h:
+../Drivers/lightlevels.h:
 ../Core/Inc/can_message_queue.h:
 ../Core/Inc/can_driver.h:

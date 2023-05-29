@@ -1,1 +1,1 @@
-../Drivers/lightlevels.c:12:10:LIGHT_getWellLightReading	0	static
+../Drivers/lightlevels.c:12:10:LIGHT_getWellLightReading	8	static
