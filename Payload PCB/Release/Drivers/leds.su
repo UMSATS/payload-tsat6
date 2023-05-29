@@ -1,0 +1,2 @@
+../Drivers/leds.c:13:6:LED_enableLED	0	static
+../Drivers/leds.c:17:6:LED_disableLED	0	static

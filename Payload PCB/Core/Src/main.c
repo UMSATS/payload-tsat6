@@ -32,7 +32,6 @@
 #include "thermostats.h" 			// Well temperature readings
 #include "heaters.h" 				// Well heater system
 
-#include "can_driver.h" 			// CDH provided CAN drivers (can.c renamed to can_driver.c to prevent conflicts)
 #include "can_message_queue.h"
 
 /* USER CODE END Includes */
@@ -72,6 +71,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef * hcan) {
 	CAN_Message_Received(); // no error handling right now
 }
 
+CANQueue_t can_queue; // CAN Queue object
 
 /* USER CODE END 0 */
 
@@ -91,8 +91,6 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
-  CANQueue_t can_queue; // CAN Queue object
 
   /* USER CODE END Init */
 
@@ -129,7 +127,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 	  if (!CAN_Queue_IsEmpty(&can_queue)) {
-		  CANMessage can_message;
+		  CANMessage_t can_message;
 		  CAN_Queue_Dequeue(&can_queue, &can_message);
 
 		  CANMessage_t response;
@@ -138,6 +136,8 @@ int main(void)
 		  response.SenderID = 0x3; // PLD
 		  response.DestinationID = 0x1; // CDH
 		  response.command = 0x01; // ACK command code
+
+		  uint8_t led_id, therm_id, heater_id;
 
 		  switch (can_message.command) {
 		      case 0xA0: // RESET command
@@ -156,9 +156,10 @@ int main(void)
 
 		    	  CAN_Send_Default_ACK(can_message);
 
-		    	  uint8_t led_id = can_message.data[0];
+		    	  led_id = can_message.data[0];
 
-		          // TODO: ENABLE LED FROM led_id
+		    	  LED_enableLED(led_id);
+
 		    	  response.priority = 0b0001111;
 		    	  response.data[0] = 0xA1;
 		    	  response.data[1] = led_id;
@@ -170,9 +171,10 @@ int main(void)
 
 		    	  CAN_Send_Default_ACK(can_message);
 
-		    	  uint8_t led_id = can_message.data[0];
+		    	  led_id = can_message.data[0];
 
-		    	  // TODO: DISABLE LED FROM led_id
+		    	  LED_disableLED(led_id);
+
 		    	  response.priority = 0b0000111;
 		    	  response.data[0] = 0xA2;
 		    	  response.data[1] = led_id;
@@ -184,7 +186,7 @@ int main(void)
 
 		    	  CAN_Send_Default_ACK(can_message);
 
-		    	  uint8_t therm_id = can_message.data[0];
+		    	  therm_id = can_message.data[0];
 
 		    	  // TODO: ENABLE THERMOREGULATION SYSTEM FROM therm_id
 		    	  response.priority = 0b0000011;
@@ -198,7 +200,7 @@ int main(void)
 
 		    	  CAN_Send_Default_ACK(can_message);
 
-		    	  uint8_t therm_id = can_message.data[0];
+		    	  therm_id = can_message.data[0];
 
 		    	  // TODO: DISABLE THERMOREGULATION SYSTEM FROM therm_id
 		    	  response.priority = 0b0000001;
@@ -212,7 +214,7 @@ int main(void)
 
 		    	  CAN_Send_Default_ACK(can_message);
 
-		    	  uint8_t heater_id = can_message.data[0];
+		    	  heater_id = can_message.data[0];
 
 		    	  // TODO: ENABLE HEATER FROM heater_id
 		    	  response.priority = 0b0000011;
@@ -226,7 +228,7 @@ int main(void)
 
 		    	  CAN_Send_Default_ACK(can_message);
 
-		    	  uint8_t heater_id = can_message.data[0];
+		    	  heater_id = can_message.data[0];
 
 		    	  // TODO: DISABLE HEATER FROM heater_id
 		    	  response.priority = 0b0000001;
