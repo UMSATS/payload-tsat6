@@ -73,6 +73,8 @@ HAL_StatusTypeDef CAN_Transmit_Message(CANMessage_t myMessage){
 	txMessage.RTR = CAN_RTR_DATA;
 	txMessage.DLC = MAX_CAN_DATA_LENGTH;
 
+	while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0){} //wait to send CAN message
+
 	return HAL_CAN_AddTxMessage(&hcan1, &txMessage, message, &txMailbox);
 }
 
@@ -124,6 +126,25 @@ HAL_StatusTypeDef CAN_Send_Default_ACK(CANMessage_t myMessage){
         .DestinationID = myMessage.SenderID,
         .command = 0x01,
         .data = {myMessage.command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+    };
+    return CAN_Transmit_Message(ack_message);
+}
+
+/**
+ * @brief Send a CAN default ACK message for the given CAN message, with data
+ *
+ * @param myMessage: The received CAN message to send the ACK for
+ * @param p_data: The 6 bytes of data to send
+ *
+ * @return HAL_StatusTypeDef
+ */
+HAL_StatusTypeDef CAN_Send_Default_ACK_With_Data(CANMessage_t myMessage, uint8_t *p_data){
+    CANMessage_t ack_message = {
+        .priority = myMessage.priority,
+        .SenderID = SOURCE_ID,
+        .DestinationID = myMessage.SenderID,
+        .command = 0x01,
+        .data = {myMessage.command, p_data[0], p_data[1], p_data[2], p_data[3], p_data[4], p_data[5]}
     };
     return CAN_Transmit_Message(ack_message);
 }

@@ -58,7 +58,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t temp_sequence = 0;
+uint8_t light_sequence = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -82,10 +83,13 @@ void TEMP_transmitTemperatureData(uint8_t wellID) {
 	message.command = 0x34;
 	message.priority = 0b0000011;
 
-	message.data[0] = wellID;
+	message.data[0] = temp_sequence++;
 	message.data[1] = wellID;
 	message.data[2] = (temperatureReading & 0xFF00) >> 8;
 	message.data[3] = temperatureReading & 0xFF;
+	message.data[4] = 0x00;
+    message.data[5] = 0x00;
+    message.data[6] = 0x00;
 
 	CAN_Transmit_Message(message);
 
@@ -102,36 +106,15 @@ void LIGHT_transmitLightLevelData(uint8_t wellID) {
 	message.command = 0x33;
 	message.priority = 0b0011111;
 
-	message.data[0] = wellID;
+	message.data[0] = light_sequence++;
 	message.data[1] = wellID;
 	message.data[2] = (lightLevelReading & 0xFF00) >> 8;
 	message.data[3] = lightLevelReading & 0xFF;
+	message.data[4] = 0x00;
+	message.data[5] = 0x00;
+	message.data[6] = 0x00;
 
 	CAN_Transmit_Message(message);
-}
-
-// Interrupt handler for new CAN message
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan) {
-	CAN_Message_Received(); // no error handling right now
-}
-
-// this SHOULD happen once per second. System clock = 80MHz, timer interval is 80000000.
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
-	secondsCounter++;
-	if (secondsCounter >= 60) {
-		secondsCounter = 0;
-
-		for (int i = 1; i < 11; i++) {
-			TEMP_transmitTemperatureData(i);
-		}
-
-		for (int i = 1; i < 11; i++) {
-			LIGHT_transmitLightLevelData(i);
-		}
-
-
-	}
-
 }
 
 CANQueue_t can_queue; // CAN Queue object
@@ -171,11 +154,12 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI3_Init();
   MX_TIM2_Init();
-
-  HAL_TIM_Base_Start_IT(&htim2); // Enable TIM2
   /* USER CODE BEGIN 2 */
 
+  HAL_TIM_Base_Start_IT(&htim2);
+
   MAX7300_Init();
+
   CAN_Queue_Init(&can_queue);
 
   HAL_StatusTypeDef can_operation_status;
@@ -198,23 +182,13 @@ int main(void)
 		  CANMessage_t can_message;
 		  CAN_Queue_Dequeue(&can_queue, &can_message);
 
-		  CANMessage_t response;
-
-		  // these will be the same for every command
-		  response.SenderID = 0x3; // PLD
-		  response.DestinationID = 0x1; // CDH
-		  response.command = 0x01; // ACK command code
-
 		  uint8_t led_id, therm_id, heater_id;
+		  uint8_t response_data[6] = {0,0,0,0,0,0};
 
 		  switch (can_message.command) {
 		      case 0xA0: // RESET command
 
 		    	  CAN_Send_Default_ACK(can_message);
-
-		          response.priority = 0x0;
-		          response.data[0] = 0xA0;
-		          CAN_Transmit_Message(response);
 
 		          MAX6822_Manual_Reset();
 
@@ -222,98 +196,79 @@ int main(void)
 
 		      case 0xA1: // LED ON command
 
-		    	  CAN_Send_Default_ACK(can_message);
-
 		    	  led_id = can_message.data[0];
 
 		    	  LED_enableLED(led_id);
 
-		    	  response.priority = 0b0001111;
-		    	  response.data[0] = 0xA1;
-		    	  response.data[1] = led_id;
-		    	  CAN_Transmit_Message(response);
+		    	  response_data[0] = led_id;
+
+		    	  CAN_Send_Default_ACK_With_Data(can_message, response_data);
 
 				  break;
 
 		      case 0xA2: // LED OFF command
 
-		    	  CAN_Send_Default_ACK(can_message);
-
 		    	  led_id = can_message.data[0];
 
 		    	  LED_disableLED(led_id);
 
-		    	  response.priority = 0b0000111;
-		    	  response.data[0] = 0xA2;
-		    	  response.data[1] = led_id;
-		    	  CAN_Transmit_Message(response);
+		    	  response_data[0] = led_id;
+
+		    	  CAN_Send_Default_ACK_With_Data(can_message, response_data);
 
 		          break;
 
 		      case 0xA3: // THERMOREGULATION ON command
 
-		    	  CAN_Send_Default_ACK(can_message);
-
 		    	  therm_id = can_message.data[0];
 
 		    	  THERM_enableThermostat(therm_id);
 
-		    	  response.priority = 0b0000011;
-		    	  response.data[0] = 0xA3;
-		    	  response.data[1] = therm_id;
-		    	  CAN_Transmit_Message(response);
+		    	  response_data[0] = therm_id;
+
+		    	  CAN_Send_Default_ACK_With_Data(can_message, response_data);
 
 		          break;
 
 		      case 0xA4: // THERMOREGULATION OFF COMMAND
 
-		    	  CAN_Send_Default_ACK(can_message);
-
 		    	  therm_id = can_message.data[0];
 
 		    	  THERM_disableThermostat(therm_id);
 
-		    	  response.priority = 0b0000001;
-		    	  response.data[0] = 0xA4;
-		    	  response.data[1] = therm_id;
-		    	  CAN_Transmit_Message(response);
+		    	  response_data[0] = therm_id;
+
+		    	  CAN_Send_Default_ACK_With_Data(can_message, response_data);
 
 		          break;
 
 		      case 0xA5: // HEAT ON command
 
-		    	  CAN_Send_Default_ACK(can_message);
-
 		    	  heater_id = can_message.data[0];
 
 		    	  HEAT_enableHeater(heater_id);
 
-		    	  response.priority = 0b0000011;
-		    	  response.data[0] = 0xA5;
-		    	  response.data[1] = heater_id;
-		    	  CAN_Transmit_Message(response);
+		    	  response_data[0] = heater_id;
+
+                  CAN_Send_Default_ACK_With_Data(can_message, response_data);
 
 		          break;
 
 		      case 0xA6: // HEATER OFF command
 
-		    	  CAN_Send_Default_ACK(can_message);
-
 		    	  heater_id = can_message.data[0];
 
 		    	  HEAT_disableHeater(heater_id);
 
-		    	  response.priority = 0b0000001;
-		    	  response.data[0] = 0xA6;
-		    	  response.data[1] = heater_id;
-		    	  CAN_Transmit_Message(response);
+		    	  response_data[0] = heater_id;
+
+		    	  CAN_Send_Default_ACK_With_Data(can_message, response_data);
 
 		          break;
 
 		      default:
 		          break;
 		  }
-
 
 	  }
 
@@ -372,7 +327,35 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM16 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  // this SHOULD happen once per second. System clock = 80MHz, timer interval is 80000000.
+  if(htim->Instance == TIM2) {
+    secondsCounter++;
+    if (secondsCounter >= 60) {
+        secondsCounter = 0;
+        for (int i = 1; i < 11; i++) {
+            TEMP_transmitTemperatureData(i);
+        }
+        for (int i = 1; i < 11; i++) {
+            LIGHT_transmitLightLevelData(i);
+        }
+    }
+  }
+}
 
+// Interrupt handler for new CAN message
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan1) {
+    CAN_Message_Received(); // no error handling right now
+}
 /* USER CODE END 4 */
 
 /**

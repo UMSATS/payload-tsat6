@@ -1,0 +1,2 @@
+thermostats.c:14:6:THERM_enableThermostat	1
+thermostats.c:18:6:THERM_disableThermostat	1

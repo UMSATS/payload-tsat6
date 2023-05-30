@@ -1,0 +1,3 @@
+tlv2553.c:27:10:TLV2553_measureChannel	1
+tlv2553.c:55:6:TLV2553_enableCS	1
+tlv2553.c:59:6:TLV2553_disableCS	1

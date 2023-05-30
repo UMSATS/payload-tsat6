@@ -1,0 +1,2 @@
+../Drivers/thermostats.c:14:6:THERM_enableThermostat	16	static
+../Drivers/thermostats.c:18:6:THERM_disableThermostat	16	static

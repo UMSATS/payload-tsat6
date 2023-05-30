@@ -24,7 +24,7 @@
 #define MAX_CAN_DATA_LENGTH  8
 #define RECEIVED_SENDER_ID_MASK  0xC
 #define RECEIVED_DESTINATION_ID_MASK  0x3
-#define SOURCE_ID  0x2 // The ID number of the device MAX VALUE: 0x3
+#define SOURCE_ID  0x3 // The ID number of the device MAX VALUE: 0x3
 
 extern CAN_HandleTypeDef hcan1; // Set this to the CAN type found in generated main.c file
 
@@ -52,6 +52,11 @@ HAL_StatusTypeDef CAN_Message_Received(); // Interrupt handler for the CAN Bus
 
 HAL_StatusTypeDef CAN_Send_Default_ACK(
         CANMessage_t myMessage // The message that the default ACK should be sent for
+);
+
+HAL_StatusTypeDef CAN_Send_Default_ACK_With_Data(
+        CANMessage_t myMessage, // The message that the default ACK should be sent for
+        uint8_t *p_data // The 6 bytes of data that should be sent
 );
 
 #endif /* INCLUDE_CAN_H_ */

@@ -62,8 +62,8 @@ all: main-build
 main-build: Payload\ PCB.elf secondary-outputs
 
 # Tool invocations
-Payload\ PCB.elf Payload\ PCB.map: $(OBJS) $(USER_OBJS) C:\Users\Jascha\Documents\GitHub\payload-tsat6\Payload\ PCB\STM32L452RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Payload PCB.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Jascha\Documents\GitHub\payload-tsat6\Payload PCB\STM32L452RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Payload PCB.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Payload\ PCB.elf Payload\ PCB.map: $(OBJS) $(USER_OBJS) C:\Users\Owner\Desktop\Work\University\ Work\UMSATS\SatelliteCode\payload-tsat6\Payload\ PCB\STM32L452RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Payload PCB.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Owner\Desktop\Work\University Work\UMSATS\SatelliteCode\payload-tsat6\Payload PCB\STM32L452RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Payload PCB.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

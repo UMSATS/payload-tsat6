@@ -38,12 +38,12 @@ uint16_t TLV2553_measureChannel(int channelNumber) {
 
 	HAL_SPI_Transmit(&hspi3, &command, 1, 10);
 
-	TLV2553_disableCS();
 	// I forgot to wire the end-of-conversion pin. So I am waiting 5ms since the maximum conversion time is 1.6ms.
 	HAL_Delay(5);
-	TLV2553_enableCS();
 
 	HAL_SPI_Receive(&hspi3, response, 2, 10);
+
+	TLV2553_disableCS();
 
 	result = (response[0] << 8) | (response[1]);
 	result = result >> 4;						// move padded 0s from LSB to MSB

@@ -1,0 +1,2 @@
+../Drivers/lowlevel/max6822.c:14:6:MAX6822_Toggle_WDI	8	static
+../Drivers/lowlevel/max6822.c:19:6:MAX6822_Manual_Reset	8	static
